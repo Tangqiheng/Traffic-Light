@@ -1,5 +1,7 @@
 ﻿import sys
 import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+import os
 import time
 import logging
 
@@ -107,46 +109,42 @@ def test_api_endpoints():
     print("\n=== 开始测试API端点 ===")
     
     try:
-        import uvicorn
-        from fastapi.testclient import TestClient
-        from main import app
-        
-        client = TestClient(app)
-        
-        # 测试交通状态API
-        response = client.get("/api/traffic/status")
-        if response.status_code == 200:
-            print(" 交通状态API测试成功")
-        else:
-            print(f" 交通状态API测试失败: {response.status_code}")
-            return False
-        
-        # 测试信号灯状态API
-        response = client.get("/api/traffic/light/intersection_001")
-        if response.status_code == 200:
-            print(" 信号灯状态API测试成功")
-        else:
-            print(f" 信号灯状态API测试失败: {response.status_code}")
-            return False
-        
-        # 测试智能状态API
-        response = client.get("/api/traffic/intelligent/status")
-        if response.status_code == 200:
-            print(" 智能状态API测试成功")
-        else:
-            print(f" 智能状态API测试失败: {response.status_code}")
-            return False
-        
-        # 测试传感器状态API
-        response = client.get("/api/traffic/intelligent/sensors")
-        if response.status_code == 200:
-            print(" 传感器状态API测试成功")
-        else:
-            print(f" 传感器状态API测试失败: {response.status_code}")
-            return False
-        
-        return True
-        
+        from app import app
+        # 使用 Flask 自带的测试客户端
+        with app.test_client() as client:
+            # 测试交通状态API
+            response = client.get("/api/traffic/status")
+            if response.status_code == 200:
+                print(" 交通状态API测试成功")
+            else:
+                print(f" 交通状态API测试失败: {response.status_code}")
+                return False
+
+            # 测试信号灯状态API
+            response = client.get("/api/traffic/light/intersection_001")
+            if response.status_code == 200:
+                print(" 信号灯状态API测试成功")
+            else:
+                print(f" 信号灯状态API测试失败: {response.status_code}")
+                return False
+
+            # 测试智能状态API
+            response = client.get("/api/traffic/intelligent/status")
+            if response.status_code == 200:
+                print(" 智能状态API测试成功")
+            else:
+                print(f" 智能状态API测试失败: {response.status_code}")
+                return False
+
+            # 测试传感器状态API
+            response = client.get("/api/traffic/intelligent/sensors")
+            if response.status_code == 200:
+                print(" 传感器状态API测试成功")
+            else:
+                print(f" 传感器状态API测试失败: {response.status_code}")
+                return False
+
+            return True
     except Exception as e:
         print(f" API端点测试失败: {e}")
         import traceback

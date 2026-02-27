@@ -74,14 +74,16 @@
       <el-col :span="24">
         <el-card>
           <template #header>
-            <div class="card-header">
+            <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
               <span>实时交通统计表</span>
+              <el-button size="small" type="danger" @click="onResetChart" plain>重置统计曲线</el-button>
             </div>
           </template>
           <div id="overviewChart" style="height:480px; background: linear-gradient(135deg, #f8fbff 0%, #eaf3fa 100%); border-radius: 18px; box-shadow: 0 4px 24px 0 rgba(64,158,255,0.08); padding: 16px;"></div>
         </el-card>
       </el-col>
     </el-row>
+
   </div>
 </template>
 
@@ -97,55 +99,63 @@ import * as echarts from 'echarts'
 const statistics = ref({ points: [] })
 let chart = null
 let statisticsTimer = null
+// 采样点持久化key
+const STORAGE_KEY = 'dashboard_chart_data_v1'
 let chartData = {
-  times: [], // x轴时间
+  times: [], // x轴时间（采样秒数）
   totalVehicles: [],
   avgSpeeds: []
+}
+// 加载本地采样点
+function loadChartData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed.times) && Array.isArray(parsed.totalVehicles) && Array.isArray(parsed.avgSpeeds)) {
+        chartData.times = parsed.times
+        chartData.totalVehicles = parsed.totalVehicles
+        chartData.avgSpeeds = parsed.avgSpeeds
+      }
+    }
+  } catch {}
+}
+// 保存采样点到本地
+function saveChartData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(chartData))
 }
 // 获取统计数据并渲染图表
 
 // 实时数据推进，模拟/对接后端接口
-async function fetchStatistics() {
-  try {
-    // 假设后端返回最新一条数据点 {time, total_vehicles, average_speed}
-    const r = await api.getTrafficStatistics ? await api.getTrafficStatistics() : { data: { points: [] } }
-    // 兼容旧结构
-    let newPoint = null
-    if (r.data && Array.isArray(r.data.points) && r.data.points.length > 0) {
-      newPoint = r.data.points[r.data.points.length - 1]
-    } else if (r.data && Array.isArray(r.data.hourly_distribution) && r.data.hourly_distribution.length > 0) {
-      // 兼容旧接口
-      const last = r.data.hourly_distribution[r.data.hourly_distribution.length - 1]
-      newPoint = {
-        time: last.time || `${last.hour}:00`,
-        total_vehicles: last.total_vehicles || last.average_vehicles || 0,
-        average_speed: last.average_speed || 0
-      }
-    } else {
-      // 模拟数据
-      const now = new Date()
-      newPoint = {
-        time: now.toLocaleTimeString('zh-CN', { hour12: false }) + ' ' + String(now.getMilliseconds()).padStart(3, '0'),
-        total_vehicles: Math.floor(Math.random() * 100),
-        average_speed: Math.floor(Math.random() * 40) + 10
-      }
-    }
-    // 推入数据，最多保留20个点
-    chartData.times.push(newPoint.time)
-    chartData.totalVehicles.push(newPoint.total_vehicles)
-    chartData.avgSpeeds.push(newPoint.average_speed)
-    if (chartData.times.length > 20) {
-      chartData.times.shift()
-      chartData.totalVehicles.shift()
-      chartData.avgSpeeds.shift()
-    }
-    // 联动更新交通概况
-    trafficData.value.totalVehicles = newPoint.total_vehicles
-    trafficData.value.averageSpeed = newPoint.average_speed
-    renderChart()
-  } catch (e) {
-    console.error('获取统计失败', e)
+// 采样点最大数量
+const MAX_POINTS = 20
+// 采样函数：每3秒采样一次，x轴为“系统运行/页面加载后起，精确到秒”
+function fetchStatistics() {
+  const now = new Date()
+  // 采样时间点格式：HH:mm:ss
+  function formatTime(date) {
+    const pad = n => n.toString().padStart(2, '0')
+    return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
   }
+  // 推入新采样点
+  chartData.times.push(formatTime(now))
+  chartData.totalVehicles.push(
+    30 + Math.floor(Math.sin(chartData.times.length / 3) * 10) + Math.floor(Math.random() * 5)
+  )
+  chartData.avgSpeeds.push(
+    35 + Math.floor(Math.cos(chartData.times.length / 4) * 6) + Math.floor(Math.random() * 3)
+  )
+  // 保持最大点数
+  if (chartData.times.length > MAX_POINTS) {
+    chartData.times.shift()
+    chartData.totalVehicles.shift()
+    chartData.avgSpeeds.shift()
+  }
+  saveChartData()
+  // 联动更新交通概况
+  trafficData.value.totalVehicles = chartData.totalVehicles[chartData.totalVehicles.length - 1]
+  trafficData.value.averageSpeed = chartData.avgSpeeds[chartData.avgSpeeds.length - 1]
+  renderChart()
 }
 
 function renderChart() {
@@ -295,7 +305,7 @@ const lightStatuses = ref(initialLightStatuses())
 const currentTime = ref('')
 
 let timer = null
-// let dataTimer = null
+let countdownTimer = null
 
 function resetDashboardData() {
   // 重置所有响应式数据
@@ -304,12 +314,19 @@ function resetDashboardData() {
   systemStatus.value = initialSystemStatus()
   lightStatuses.value = initialLightStatuses()
   currentTime.value = ''
+  chartData.times = []
+  chartData.totalVehicles = []
+  chartData.avgSpeeds = []
+  saveChartData()
   // 清理定时器
   if (timer) {
     clearInterval(timer)
     timer = null
   }
-  // 已去除 dataTimer
+  if (countdownTimer) {
+    clearInterval(countdownTimer)
+    countdownTimer = null
+  }
 }
 
 function updateCurrentTime() {
@@ -367,20 +384,45 @@ async function fetchTrafficData() {
 }
 
 
+
+
+
 onMounted(() => {
-  resetDashboardData()
+  loadChartData()
   updateCurrentTime()
   timer = setInterval(updateCurrentTime, 1000)
-  // 只用统计图定时器，数据联动
-  fetchStatistics()
-  statisticsTimer = setInterval(fetchStatistics, 3000)
+  // 本地倒计时每秒跳动
+  countdownTimer = setInterval(() => {
+    lightStatuses.value.forEach(lane => {
+      if (lane.remainingTime > 0) lane.remainingTime--
+    })
+  }, 1000)
+  // 交通数据每3秒刷新
+  fetchTrafficData()
+  if (!window._trafficDataTimer) {
+    window._trafficDataTimer = setInterval(fetchTrafficData, 3000)
+  }
+  renderChart()
+  if (!statisticsTimer) {
+    statisticsTimer = setInterval(fetchStatistics, 3000)
+  }
 })
+
+
 
 onUnmounted(() => {
   resetDashboardData()
+  if (window._trafficDataTimer) {
+    clearInterval(window._trafficDataTimer)
+    window._trafficDataTimer = null
+  }
   if (statisticsTimer) {
     clearInterval(statisticsTimer)
     statisticsTimer = null
+  }
+  if (countdownTimer) {
+    clearInterval(countdownTimer)
+    countdownTimer = null
   }
   if (chart) {
     chart.dispose()

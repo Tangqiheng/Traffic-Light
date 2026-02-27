@@ -42,12 +42,10 @@ class ControlLog(Base):
     details = Column(String)
     success = Column(Boolean, default=True)
 
-# 创建内存数据库用于演示
-SQLALCHEMY_DATABASE_URL = "sqlite:///./traffic_control.db"
-# 在生产环境中，您可能想使用 PostgreSQL 或 MySQL：
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+# 切换为MySQL数据库
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:123456@localhost:3306/traffic_db?charset=utf8mb4"
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def create_tables():

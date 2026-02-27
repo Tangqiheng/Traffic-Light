@@ -1,0 +1,1 @@
+import{_ as o,c as t,a as s,e as c,o as _}from"./index-BJpBMmue.js";const a={class:"reports-view"},r={__name:"Reports",setup(p){return(n,m)=>{const e=c("el-empty");return _(),t("div",a,[s(e,{description:"暂无统计报告内容"})])}}},l=o(r,[["__scopeId","data-v-38da297e"]]);export{l as default};

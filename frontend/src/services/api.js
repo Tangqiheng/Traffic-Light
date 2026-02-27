@@ -7,21 +7,29 @@ export const changePassword = (data) => authClient.post('/auth/change_password',
 // API服务对象
 const apiService = {
   // 交通状态相关API
-  getTrafficStatus() {
-    return authClient.get('/traffic/data').then(response => response.data)
+  // 获取实时交通状态，支持 intersectionId
+  getTrafficStatus(intersectionId) {
+    // intersectionId 可选，默认 intersection_001
+    const id = intersectionId || 'intersection_001';
+    return authClient.get(`/traffic/data?intersection_id=${id}`).then(response => response.data)
   },
 
+  // 获取信号灯状态
   getTrafficLightStatus(intersectionId) {
-    return authClient.get(`/traffic/data`).then(response => response.data)
+    const id = intersectionId || 'intersection_001';
+    return authClient.get(`/traffic/light_status?intersection_id=${id}`).then(response => response.data)
   },
 
   // 历史数据相关API
-  getTrafficHistory(limit = 50) {
-    return authClient.get(`/traffic/data`).then(response => response.data)
+  getTrafficHistory(limit = 50, intersectionId) {
+    const id = intersectionId || 'intersection_001';
+    return authClient.get(`/traffic/history?intersection_id=${id}&limit=${limit}`).then(response => response.data)
   },
 
-  getTrafficStatistics(hours = 24) {
-    return authClient.get(`/traffic/data`).then(response => response.data)
+  // 统计数据接口
+  getTrafficStatistics(hours = 24, intersectionId) {
+    const id = intersectionId || 'intersection_001';
+    return authClient.get(`/traffic/statistics?intersection_id=${id}&hours=${hours}`).then(response => response.data)
   },
 
   // 控制相关API

@@ -11,7 +11,11 @@ const form = ref({ old_password: '', new_password: '', confirm_password: '' })
 
 const submit = async () => {
   if (!form.value.old_password || !form.value.new_password) {
-    ElMessage.error('请完整填写表单')
+    ElMessage.error('请填写完整的旧密码和新密码')
+    return
+  }
+  if (form.value.new_password.length < 6) {
+    ElMessage.error('新密码长度不能少于6位')
     return
   }
   if (form.value.new_password !== form.value.confirm_password) {
@@ -20,14 +24,18 @@ const submit = async () => {
   }
 
   try {
-    await api.changePassword({ old_password: form.value.old_password, new_password: form.value.new_password })
-    ElMessage.success('密码修改成功，请重新登录')
-    // 强制登出
-    store.dispatch('logout')
-    logout()
+    const res = await api.changePassword({ old_password: form.value.old_password, new_password: form.value.new_password })
+    if (res.data && res.data.success) {
+      ElMessage.success('密码修改成功，请重新登录')
+      // 强制登出
+      store.dispatch('logout')
+      logout()
+    } else {
+      ElMessage.error(res.data?.error || res.data?.message || '修改失败')
+    }
   } catch (err) {
     console.error(err)
-    ElMessage.error(err.response?.data?.detail || '修改失败')
+    ElMessage.error(err.response?.data?.error || err.response?.data?.detail || '修改失败')
   }
 }
 </script>

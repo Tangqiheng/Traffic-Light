@@ -27,21 +27,52 @@ threading.Thread(target=_refresh_sim_data, daemon=True).start()
 class TrafficService:
     @staticmethod
     def get_traffic_status(intersection_id: str):
-        """获取动态交通状态（自动刷新模拟数据）"""
+        """获取动态交通状态（平滑模拟数据，车流量与速度匹配）"""
         import random, time
         now = int(time.time())
         directions = ['north', 'south', 'east', 'west']
+        # 用静态变量保存上一次的车流量和速度，实现平滑变化
+        if not hasattr(TrafficService.get_traffic_status, '_last_state'):
+            TrafficService.get_traffic_status._last_state = {
+                d: {
+                    'vehicle_count': random.randint(15, 35),
+                    'average_speed': random.uniform(25, 40)
+                } for d in directions
+            }
+        last_state = TrafficService.get_traffic_status._last_state
         lanes = []
         for direction in directions:
-            vehicle_count = random.randint(10, 60)
-            average_speed = random.uniform(15, 45)
+            prev_count = last_state[direction]['vehicle_count']
+            prev_speed = last_state[direction]['average_speed']
+            # 车流量缓慢变化，波动不超过±6
+            delta = random.randint(-6, 6)
+            vehicle_count = max(5, min(50, prev_count + delta))
+            # 速度与车流量反相关，车多则慢，车少则快
+            if vehicle_count < 12:
+                average_speed = random.uniform(38, 50)
+            elif vehicle_count < 22:
+                average_speed = random.uniform(32, 44)
+            elif vehicle_count < 32:
+                average_speed = random.uniform(24, 36)
+            else:
+                average_speed = random.uniform(15, 28)
+            # 速度也做微小平滑
+            average_speed = (prev_speed * 0.7 + average_speed * 0.3)
+            # 保存本次状态
+            last_state[direction]['vehicle_count'] = vehicle_count
+            last_state[direction]['average_speed'] = average_speed
             queue_length = max(0, int(vehicle_count * 0.3 + random.randint(0, 3)))
-            status = 'congested' if vehicle_count > 40 else ('normal' if vehicle_count > 20 else 'light')
+            if vehicle_count < 12:
+                status = 'light'
+            elif vehicle_count < 28:
+                status = 'normal'
+            else:
+                status = 'congested'
             lane = Lane(
                 id=f"lane_{direction}_1",
                 direction=direction,
                 vehicle_count=vehicle_count,
-                average_speed=average_speed,
+                average_speed=round(average_speed, 1),
                 queue_length=queue_length,
                 status=status
             )

@@ -1,0 +1,1199 @@
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    # 只有长度校验通过后才进行密码校验
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    log_msg(f"[ERROR] Password too long: {len(password.encode('utf-8'))} bytes")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    # 只有长度校验通过后才进行密码校验
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    }), 400
+       ^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 129, in login
+    }), 400
+       ^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    password_bytes = password
+       ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    password_bytes = password
+       ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 72, in verify_password
+    password_bytes = password
+       ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 77, in verify_password
+    return pwd_context.verify(safe_password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 77, in verify_password
+    return pwd_context.verify(safe_password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 77, in verify_password
+    return pwd_context.verify(safe_password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 77, in verify_password
+    return pwd_context.verify(safe_password, getattr(self, 'hashed_password', ''))
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 77, in verify_password
+    return bcrypt.checkpw(safe_password.encode('utf-8'), hashed_pw)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 77, in verify_password
+    return bcrypt.checkpw(safe_password.encode('utf-8'), hashed_pw)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 77, in verify_password
+    return False
+       ^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+
+[DEBUG] Received password: 'admin123', length: 8
+[EXCEPTION] bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+Traceback (most recent call last):
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\app.py", line 131, in login
+    if not user.verify_password(password):
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\T2101235618\Desktop\Traffic Light\backend\auth.py", line 77, in verify_password
+    return False
+       ^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\context.py", line 2347, in verify
+    return record.verify(secret, hash, **kwds)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\handlers\bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Anaconda\Lib\site-packages\passlib\utils\handlers.py", line 2176, in set_backend
+    raise default_error
+passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you install one (e.g. 'pip install bcrypt')
+
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[ERROR] 密码错误
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录

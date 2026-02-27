@@ -21,6 +21,7 @@
               <el-button size="small" type="primary" @click="fetchTrafficStatus">刷新</el-button>
             </div>
           </template>
+  // 移除后端统计数据依赖
           <el-table :data="lanes" stripe style="width:100%">
             <el-table-column prop="id" label="车道ID" width="160" />
             <el-table-column prop="direction" label="方向" width="100" />
@@ -41,7 +42,7 @@
       <el-col :span="12">
         <el-card>
           <template #header>
-            <div>交通统计（最近24小时）</div>
+            <div>实时交通统计表</div>
           </template>
           <div id="overviewChart" style="height:320px"></div>
         </el-card>
@@ -79,17 +80,27 @@
 </template>
 
 <script setup>
+// 实时统计曲线数据
 import { ref, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import api from '../services/api.js'
+
+const realtimeTimestamps = ref([]) // x轴时间点
+const realtimeFlow = ref([])       // 总车流量
+const realtimeSpeed = ref([])      // 平均速度
+let realtimeTimer = null
+const MAX_POINTS = 1200 // 最多保留1小时数据（3秒采样一次）
 
 const lanes = ref([])
 const overview = ref({ total_vehicles: 0, average_speed: 0, congestion_points: 0 })
 const light = ref({ phases: [] })
 const localPhases = ref([])
 let lightCountdownTimer = null
+let pollTimer = null
+let statsTimer = null
+let chart = null
 const system = ref({ status: 'unknown', version: '-', services: {} })
-const statistics = ref({ hourly_distribution: [] })
+// 移除后端统计数据依赖
 
 const summaryCards = ref([
   { key: 'total', title: '总车流量', value: 0, sub: '当前路口' },
@@ -147,15 +158,7 @@ const fetchOverview = async () => {
   }
 }
 
-const fetchStatistics = async () => {
-  try {
-    const r = await api.getTrafficStatistics()
-    statistics.value = r.data || {}
-    renderChart()
-  } catch (e) {
-    console.error('获取统计失败', e)
-  }
-}
+// 移除fetchStatistics函数
 
 const fetchSystemStatus = async () => {
   try {
@@ -172,23 +175,86 @@ const renderChart = () => {
   if (!dom) return
   if (!chart) chart = echarts.init(dom)
 
-  const hours = (statistics.value.hourly_distribution || []).map(i => `${i.hour}:00`)
-  const values = (statistics.value.hourly_distribution || []).map(i => i.average_vehicles)
-
   chart.setOption({
-    title: { text: '24小时车流量分布', left: 'center' },
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: hours.length ? hours : ['0:00','4:00','8:00','12:00','16:00','20:00'] },
-    yAxis: { type: 'value' },
-    series: [{ type: 'bar', data: values.length ? values : [10,20,30,15,25,10], itemStyle: { color: '#409EFF' } }]
+    title: { text: '实时交通统计表', left: 'center' },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'cross' },
+      formatter: params => {
+        let t = params[0]?.axisValue || ''
+        let flow = params.find(p => p.seriesName === '总车流量')?.data ?? '-'
+        let speed = params.find(p => p.seriesName === '平均速度')?.data ?? '-'
+        return `${t}<br/>总车流量：<b>${flow}</b><br/>平均速度：<b>${speed}</b>`
+      }
+    },
+    legend: { data: ['总车流量', '平均速度'] },
+    xAxis: {
+      type: 'category',
+      data: realtimeTimestamps.value,
+      axisLabel: {
+        formatter: v => v,
+        rotate: 30,
+        showMaxLabel: true,
+        showMinLabel: true,
+        interval: 0 // 强制显示每个点的label
+      },
+      boundaryGap: false,
+      splitNumber: realtimeTimestamps.value.length,
+      min: 'dataMin',
+      max: 'dataMax',
+    },
+    yAxis: [
+      { type: 'value', name: '车流量(辆)', minInterval: 1 },
+      { type: 'value', name: '速度(km/h)', min: 0, max: 120, position: 'right' }
+    ],
+    series: [
+      {
+        name: '总车流量',
+        type: 'line',
+        data: realtimeFlow.value,
+        yAxisIndex: 0,
+        smooth: true,
+        showSymbol: true,
+        itemStyle: { color: '#409EFF' }
+      },
+      {
+        name: '平均速度',
+        type: 'line',
+        data: realtimeSpeed.value,
+        yAxisIndex: 1,
+        smooth: true,
+        showSymbol: true,
+        itemStyle: { color: '#67C23A' }
+      }
+    ]
   })
 }
 
 onMounted(async () => {
+    // 页面加载时强制清空采样数据，彻底避免历史/缓存影响
+    realtimeTimestamps.value = []
+    realtimeFlow.value = []
+    realtimeSpeed.value = []
+    // 实时采样定时器（每3秒采样一次总车流量和平均速度）
+    const pushRealtimePoint = () => {
+      const now = new Date()
+      // 记录精确到秒的真实时间（YYYY-MM-DD HH:mm:ss）
+      const pad = n => n.toString().padStart(2, '0')
+      const timeStr = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
+      realtimeTimestamps.value.push(timeStr)
+      realtimeFlow.value.push(overview.value.total_vehicles || 0)
+      realtimeSpeed.value.push(overview.value.average_speed || 0)
+      if (realtimeTimestamps.value.length > MAX_POINTS) {
+        realtimeTimestamps.value.shift()
+        realtimeFlow.value.shift()
+        realtimeSpeed.value.shift()
+      }
+      renderChart()
+    }
   await fetchTrafficStatus()
   await fetchLightStatus()
   await fetchOverview()
-  await fetchStatistics()
+  // 不再拉取后端统计数据
   await fetchSystemStatus()
 
   startLightCountdown()
@@ -202,13 +268,17 @@ onMounted(async () => {
     startLightCountdown()
   }, 10000)
 
-  statsTimer = setInterval(fetchStatistics, 30000)
+  // 不再定时拉取后端统计数据
+
+  pushRealtimePoint() // 首次采样
+  realtimeTimer = setInterval(pushRealtimePoint, 3000)
 })
 
 onUnmounted(() => {
   if (pollTimer) clearInterval(pollTimer)
-  if (statsTimer) clearInterval(statsTimer)
+  // 不再定时拉取后端统计数据
   if (lightCountdownTimer) clearInterval(lightCountdownTimer)
+  if (realtimeTimer) clearInterval(realtimeTimer)
   if (chart) chart.dispose()
 })
 </script>

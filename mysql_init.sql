@@ -1,0 +1,16 @@
+-- 创建数据库
+CREATE DATABASE IF NOT EXISTS traffic_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE traffic_db;
+
+-- 创建用户表（与SQLAlchemy模型兼容）
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    hashed_password VARCHAR(200) NOT NULL,
+    full_name VARCHAR(100),
+    is_active BOOLEAN DEFAULT 1,
+    is_admin BOOLEAN DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

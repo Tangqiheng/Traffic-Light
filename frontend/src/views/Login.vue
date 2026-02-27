@@ -82,7 +82,27 @@ const handleLogin = async () => {
     await loginFormRef.value.validate()
     loading.value = true
 
-    const response = await login(loginForm.username, loginForm.password)
+    // 自动裁剪密码长度，避免超过72字节
+    let safePassword = loginForm.password
+    // 先去除首尾空格
+    safePassword = safePassword.trim()
+    // 超过72字节自动截断（utf-8编码下多字节字符也能处理）
+    let encoder = new TextEncoder()
+    let bytes = encoder.encode(safePassword)
+    if (bytes.length > 72) {
+      // 截断到72字节
+      let truncated = ''
+      let total = 0
+      for (let ch of safePassword) {
+        let chBytes = encoder.encode(ch)
+        if (total + chBytes.length > 72) break
+        truncated += ch
+        total += chBytes.length
+      }
+      safePassword = truncated
+    }
+
+    const response = await login(loginForm.username, safePassword)
 
     // 检查是否有安全警告
     if (response.code === 'DEFAULT_PASSWORD_WARNING') {
@@ -119,11 +139,22 @@ const handleLogin = async () => {
 }
 
 // 存储token并跳转
-const storeTokensAndRedirect = (data) => {
+import { useStore } from 'vuex'
+const store = useStore()
+
+const storeTokensAndRedirect = async (data) => {
   localStorage.setItem('access_token', data.access_token)
-  // 如果有refresh_token则存储，否则存储空字符串
   localStorage.setItem('refresh_token', data.refresh_token || '')
   ElMessage.success(data.message || '登录成功')
+  // 登录后立即拉取用户信息并写入store，确保主页面右上角显示
+  try {
+    const { getCurrentUser } = await import('../services/auth.js')
+    const res = await getCurrentUser()
+    store.dispatch('setUser', res.data)
+  } catch (e) {
+    // 拉取失败也不影响跳转
+    store.dispatch('setUser', null)
+  }
   router.push('/')
 }
 

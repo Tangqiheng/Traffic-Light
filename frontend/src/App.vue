@@ -133,7 +133,8 @@ const fetchUserInfo = async () => {
     store.dispatch && store.dispatch('setUser', response.data)
   } catch (error) {
     console.error('获取用户信息失败:', error)
-    handleLogout()
+    // 只清空user，不跳转
+    store.dispatch && store.dispatch('logout')
   }
 }
 
@@ -153,9 +154,17 @@ watch(route, () => {
   setActiveMenu()
 }, { immediate: true })
 
-onMounted(() => {
+onMounted(async () => {
   const token = localStorage.getItem('access_token')
-  if (token) fetchUserInfo()
+  // 没有token直接跳转登录页（防止直接访问主界面）
+  if (!token) {
+    router.replace('/login')
+    return
+  }
+  // 有token但无用户信息时，先拉取
+  if (!store.getters?.user) {
+    await fetchUserInfo()
+  }
 })
 </script>
 
@@ -184,9 +193,16 @@ onMounted(() => {
 .logo-text { color: #fff; font-size: 18px; font-weight: 600; margin-left: 10px; letter-spacing: 0.5px }
 .navigation-menu { border: none !important; background: transparent; flex: 1; margin: 0 30px; max-width: 700px }
 .navigation-menu :deep(.el-menu-item) { color: #fff !important; height: 70px !important; line-height: 70px !important; border-bottom: 3px solid transparent !important }
-.navigation-menu :deep(.el-menu-item:hover) { background-color: rgba(255, 255, 255, 0.1) !important }
-.navigation-menu :deep(.el-menu-item.is-active) { background-color: transparent !important; border-bottom: 3px solid #fff !important; color: #fff !important; font-weight: 600 }
-.navigation-menu :deep(.el-sub-menu__title) { color: #fff !important; height: 70px !important; line-height: 70px !important }
+.navigation-menu :deep(.el-menu-item:hover) { background-color: rgba(255, 255, 255, 0.1) !important; }
+.navigation-menu :deep(.el-menu-item.is-active) { background-color: transparent !important; border-bottom: 3px solid #fff !important; color: #fff !important; font-weight: 600; }
+.navigation-menu :deep(.el-sub-menu__title) { color: #fff !important; height: 70px !important; line-height: 70px !important; }
+
+/* 修改数据分析模块悬停样式 - 避免纯白色背景，采用浅色蒙层效果 */
+:deep(.el-sub-menu__title:hover) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)) !important;
+  color: #fff !important;
+}
+
 .user-info { flex-shrink: 0 }
 .el-dropdown-link { cursor: pointer; color: #fff; display: flex; align-items: center }
 .main-content { background-color: #f8fafc; color: #333; padding: 20px; min-height: calc(100vh - 122px) }

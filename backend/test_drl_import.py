@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """测试DRLTrafficController导入"""
-
+import sys
 try:
     from controllers.drl_traffic_controller import DRLTrafficController
-    print("✅ 成功导入 DRLTrafficController")
+    print("成功导入 DRLTrafficController")
     
     # 测试实例化
     controller = DRLTrafficController("test_intersection")
-    print("✅ 成功创建 DRLTrafficController 实例")
+    print("成功创建 DRLTrafficController 实例")
     
     # 测试基本方法
     dummy_data = {
@@ -22,12 +22,12 @@ try:
     }
     
     phase, duration = controller.get_next_phase(dummy_data)
-    print(f"✅ 成功调用 get_next_phase: phase={phase}, duration={duration}")
+    print(f"成功调用 get_next_phase: phase={phase}, duration={duration}")
     
     metrics = controller.get_performance_metrics()
-    print(f"✅ 成功获取性能指标: {metrics}")
+    print(f"成功获取性能指标: {metrics}")
     
 except ImportError as e:
-    print(f"❌ 导入错误: {e}")
+    print(f"导入错误: {e}")
 except Exception as e:
-    print(f"❌ 运行时错误: {e}")
+    print(f"运行时错误: {e}")

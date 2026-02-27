@@ -20,13 +20,19 @@ authClient.interceptors.request.use(
 )
 
 // 响应拦截器：处理认证错误
+// 防止401弹窗/跳转频繁触发
+let isHandling401 = false
 authClient.interceptors.response.use(
   response => response,
   async error => {
-    if (error.response?.status === 401) {
-      // 认证失败，清除token并跳转登录
+    if (error.response?.status === 401 && !isHandling401) {
+      isHandling401 = true
       localStorage.removeItem('access_token')
-      window.location.href = '/login'
+      // 延迟跳转，避免多次401时多次跳转
+      setTimeout(() => {
+        isHandling401 = false
+        window.location.href = '/login'
+      }, 500)
     }
     return Promise.reject(error)
   }
@@ -35,10 +41,11 @@ authClient.interceptors.response.use(
 export default authClient
 
 // 认证相关API
-export const login = (username, password) => {
+// 只允许传递已截断的 safePassword，防止误用原始 password
+export const login = (username, safePassword) => {
   return axios.post('/api/auth/login', {
     username,
-    password
+    password: safePassword
   }).then(response => response.data) // 返回data而不是整个response对象
 }
 

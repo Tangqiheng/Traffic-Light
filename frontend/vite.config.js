@@ -10,11 +10,11 @@ export default defineConfig({
     }
   },
   server: {
-    port: 5175,  // 更新为5175端口
+    port: 5173,  // 更新为5173端口
     strictPort: true,  // 强制使用指定端口
     proxy: {
       '/api': {
-        target: 'http://localhost:8001',
+        target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
         configure: (proxy, options) => {

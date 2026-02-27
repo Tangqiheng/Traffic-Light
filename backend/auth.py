@@ -1,15 +1,14 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from database import db
 from datetime import datetime
-from passlib.context import CryptContext
+import hashlib
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
 import os
 
 
-# 密码加密上下文
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 # JWT配置
 SECRET_KEY = "your-secret-key-here"  # 生产环境应该使用环境变量
@@ -42,6 +41,12 @@ class User(db.Model):
 
     def to_dict(self):
         try:
+            print("=== user.to_dict() 调用，当前属性 ===")
+            print(vars(self))
+            created_at = getattr(self, 'created_at', None)
+            updated_at = getattr(self, 'updated_at', None)
+            created_at_str = created_at.isoformat() if created_at and hasattr(created_at, 'isoformat') else str(created_at) if created_at else None
+            updated_at_str = updated_at.isoformat() if updated_at and hasattr(updated_at, 'isoformat') else str(updated_at) if updated_at else None
             return {
                 'id': getattr(self, 'id', None),
                 'username': getattr(self, 'username', None),
@@ -49,8 +54,8 @@ class User(db.Model):
                 'full_name': getattr(self, 'full_name', None),
                 'is_active': getattr(self, 'is_active', None),
                 'is_admin': getattr(self, 'is_admin', None),
-                'created_at': self.created_at.isoformat() if getattr(self, 'created_at', None) else None,
-                'updated_at': self.updated_at.isoformat() if getattr(self, 'updated_at', None) else None
+                'created_at': created_at_str,
+                'updated_at': updated_at_str
             }
         except Exception as e:
             import traceback
@@ -62,13 +67,19 @@ class User(db.Model):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+
     def verify_password(self, password: str) -> bool:
-        """验证密码"""
-        return pwd_context.verify(password, getattr(self, 'hashed_password', ''))
+        """
+        明文密码校验（仅演示用，生产环境请勿使用！）
+        """
+        # 直接明文比对
+        return password == getattr(self, 'hashed_password', '')
 
     def set_password(self, password: str):
-        """设置密码"""
-        self.hashed_password = pwd_context.hash(password)
+        """
+        明文存储密码（仅演示用，生产环境请勿使用！）
+        """
+        self.hashed_password = password
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """创建访问令牌"""

@@ -1,23 +1,37 @@
-
-
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import logging
 from database import db
 from auth import User, create_access_token, create_refresh_token, verify_token
+from auth_util import admin_auth_check
 import os
+from apscheduler.schedulers.background import BackgroundScheduler
+from models import TrafficStat
 
 def create_app():
+    # 启动定时采集任务（APScheduler）
+    import random
+    def collect_traffic_data():
+        # 采集模拟数据，实际可替换为真实采集逻辑
+        flow = random.randint(30, 60)
+        speed = round(random.uniform(30, 45), 2)
+        with app.app_context():
+            stat = TrafficStat(
+                flow=flow,
+                speed=speed
+            )
+            db.session.add(stat)
+            db.session.commit()
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(collect_traffic_data, 'interval', seconds=60)
+    scheduler.start()
     app = Flask(__name__)
-    
     # 配置数据库 - 使用新的数据库文件名
     app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:123456@localhost:3306/traffic_db?charset=utf8mb4"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
     # 初始化扩展
     db.init_app(app)
     CORS(app)  # 允许跨域请求
-    
     # 创建数据库表
     with app.app_context():
         # 确保导入User模型到Base.metadata中
@@ -27,10 +41,14 @@ def create_app():
         print("数据库表创建完成")
         # 创建默认管理员用户
         create_default_admin()
-    
     # 注册路由
     register_routes(app)
-    
+    # 注册admin用户管理接口
+    try:
+        from admin_user_api_patch import register_admin_user_api
+        register_admin_user_api(app)
+    except Exception as e:
+        print(f"[警告] 注册admin用户管理接口失败: {e}")
     return app
 
 def create_default_admin():
@@ -52,41 +70,47 @@ def create_default_admin():
 
 def register_routes(app):
     """注册所有路由"""
-    
     # 统计数据接口，兼容前端 /api/traffic/statistics
     @app.route('/api/traffic/statistics')
     def traffic_statistics():
         from flask import jsonify, request
-        import datetime
-        intersection_id = request.args.get('intersection_id', 'intersection_001')
+        from models import TrafficStat
         hours = int(request.args.get('hours', 24))
+        # 查询最近hours小时的统计数据
+        import datetime
         now = datetime.datetime.now()
-        # 生成模拟数据
+        since = now - datetime.timedelta(hours=hours)
+        stats = TrafficStat.query.filter(TrafficStat.timestamp >= since).order_by(TrafficStat.timestamp.asc()).all()
         points = []
-        hourly_distribution = []
-        import random
-        for i in range(hours):
-            t = (now - datetime.timedelta(hours=hours - i - 1)).replace(minute=0, second=0, microsecond=0)
-            # 增加随机扰动，保证每次请求数据不同
-            total_vehicles = 30 + int(10 * (1 + __import__('math').sin(i / 3))) + random.randint(-5, 5)
-            average_speed = 35 + int(5 * (1 + __import__('math').cos(i / 4))) + random.randint(-2, 2)
+        for stat in stats:
             points.append({
-                'time': t.strftime('%H:%M'),
-                'total_vehicles': total_vehicles,
-                'average_speed': average_speed
+                'time': stat.timestamp.strftime('%H:%M'),
+                'total_vehicles': stat.flow,
+                'average_speed': stat.speed
             })
-            hourly_distribution.append({
-                'hour': t.hour,
-                'average_vehicles': total_vehicles,
-                'average_speed': average_speed
-            })
+        # 按小时聚合（可选）
+        hourly_distribution = []
+        if points:
+            from collections import defaultdict
+            hour_map = defaultdict(list)
+            for stat in stats:
+                hour = stat.timestamp.hour
+                hour_map[hour].append(stat)
+            for hour, stats_in_hour in hour_map.items():
+                avg_flow = int(sum(s.flow for s in stats_in_hour) / len(stats_in_hour))
+                avg_speed = round(sum(s.speed for s in stats_in_hour) / len(stats_in_hour), 2)
+                hourly_distribution.append({
+                    'hour': hour,
+                    'average_vehicles': avg_flow,
+                    'average_speed': avg_speed
+                })
+            hourly_distribution.sort(key=lambda x: x['hour'])
         return jsonify({
             'data': {
                 'points': points,
                 'hourly_distribution': hourly_distribution
             }
         })
-    
     # 添加根路径处理
     @app.route('/')
     def index():
@@ -95,10 +119,8 @@ def register_routes(app):
             'status': 'running',
             'version': '1.0.0'
         })
-    
     from controllers.traffic_controller import traffic_bp
     app.register_blueprint(traffic_bp, url_prefix='/api/traffic')
-
     # 注册动态交通数据接口，兼容前端/api/traffic/data
     from services.traffic_service import TrafficService
     @app.route('/api/traffic/data')
@@ -111,10 +133,6 @@ def register_routes(app):
         total_vehicles = sum(lane.vehicle_count for lane in lanes)
         avg_speed = round(sum(lane.average_speed for lane in lanes) / len(lanes), 1) if lanes else 0
         # 信号灯模拟
-        # 现实交通灯周期：南北/东西交替，绿30s-黄5s-红35s
-        # 周期总长70s，南北绿30-黄5-红35，东西红35-绿30-黄5
-        # 标准交通灯状态机：南北/东西交替，绿30s-黄5s-红35s
-        # 周期总长70s，南北绿30-黄5-红35，东西红35-绿30-黄5
         now = int(time.time())
         cycle = now % 70
         # 南北方向
@@ -124,7 +142,6 @@ def register_routes(app):
             ns_status, ns_countdown = "黄灯", 35 - cycle
         else:
             ns_status, ns_countdown = "红灯", 70 - cycle
-
         # 东西方向
         if cycle < 35:
             ew_status, ew_countdown = "红灯", 35 - cycle
@@ -132,7 +149,6 @@ def register_routes(app):
             ew_status, ew_countdown = "绿灯", 65 - cycle
         else:
             ew_status, ew_countdown = "黄灯", 70 - cycle
-
         # 保证倒计时为0时立即切换状态，不会出现0后又回跳
         if ns_countdown == 0:
             if ns_status == "绿灯":
@@ -141,7 +157,6 @@ def register_routes(app):
                 ns_status, ns_countdown = "红灯", 35
             elif ns_status == "红灯":
                 ns_status, ns_countdown = "绿灯", 30
-
         if ew_countdown == 0:
             if ew_status == "绿灯":
                 ew_status, ew_countdown = "黄灯", 5
@@ -149,7 +164,6 @@ def register_routes(app):
                 ew_status, ew_countdown = "红灯", 35
             elif ew_status == "红灯":
                 ew_status, ew_countdown = "绿灯", 30
-
         lights = {
             "north": {"status": ns_status, "countdown": ns_countdown},
             "south": {"status": ns_status, "countdown": ns_countdown},
@@ -166,11 +180,70 @@ def register_routes(app):
                 "lights": lights
             }]
         })
-
     # 注册认证路由
     register_auth_routes(app)
 
 def register_auth_routes(app):
+    from models import OperationLog, UserPermission
+
+    def log_operation(user, action, detail=None):
+        log = OperationLog()
+        log.user_id = getattr(user, 'id', None)
+        log.username = getattr(user, 'username', None)
+        log.action = action
+        log.detail = detail
+        db.session.add(log)
+        db.session.commit()
+
+    @app.route('/api/admin/logs', methods=['GET'])
+    def get_operation_logs():
+        """查询操作日志，支持分页和条件"""
+        _, err, code = admin_auth_check()
+        if err:
+            return err, code
+        page = int(request.args.get('page', 1))
+        page_size = int(request.args.get('page_size', 20))
+        username = request.args.get('username')
+        query = db.session.query(OperationLog)
+        if username:
+            query = query.filter(OperationLog.username == username)
+        total = query.count()
+        logs = query.order_by(OperationLog.created_at.desc()).offset((page-1)*page_size).limit(page_size).all()
+        return jsonify({
+            'logs': [dict(id=l.id, user_id=l.user_id, username=l.username, action=l.action, detail=l.detail, created_at=l.created_at.isoformat()) for l in logs],
+            'total': total, 'page': page, 'page_size': page_size
+        })
+
+    @app.route('/api/admin/permissions/<int:user_id>', methods=['GET'])
+    def get_user_permissions(user_id):
+        """查询用户权限"""
+        _, err, code = admin_auth_check()
+        if err:
+            return err, code
+        perms = db.session.query(UserPermission).filter_by(user_id=user_id).all()
+        return jsonify({'permissions': [p.permission for p in perms]})
+
+    @app.route('/api/admin/permissions/<int:user_id>', methods=['POST'])
+    def set_user_permissions(user_id):
+        """设置用户权限（覆盖式）"""
+        admin, err, code = admin_auth_check()
+        if err:
+            return err, code
+        data = request.get_json()
+        permissions = data.get('permissions', [])
+        if not isinstance(permissions, list):
+            return jsonify({'error': 'permissions必须为列表'}), 400
+        # 先删除原有
+        db.session.query(UserPermission).filter_by(user_id=user_id).delete()
+        # 新增
+        for perm in permissions:
+            up = UserPermission()
+            up.user_id = user_id
+            up.permission = perm
+            db.session.add(up)
+        db.session.commit()
+        log_operation(admin, f'分配权限', f'user_id={user_id}, permissions={permissions}')
+        return jsonify({'success': True})
     @app.route('/api/user/profile', methods=['GET'])
     def get_user_profile():
         """获取当前用户信息（兼容前端 profile 获取）"""
@@ -229,63 +302,173 @@ def register_auth_routes(app):
             import traceback
             return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
 
-        @app.route('/api/user/profile', methods=['PUT'])
-        def update_profile():
-            """修改当前用户信息（用户名、邮箱、姓名）"""
-            try:
-                # 获取当前用户
-                auth_header = request.headers.get('Authorization')
-                if not auth_header or not auth_header.startswith('Bearer '):
-                    return jsonify({'error': '未提供有效的认证令牌'}), 401
-                token = auth_header.split(' ')[1]
-                username = verify_token(token)
-                if not username:
-                    return jsonify({'error': '无效的认证令牌'}), 401
-                user = db.session.query(User).filter_by(username=username).first()
-                if not user or not (getattr(user, 'is_active', False) is True):
-                    return jsonify({'error': '用户不存在或已被禁用'}), 401
+    @app.route('/api/user/profile', methods=['PUT'])
+    def update_profile():
+        """修改当前用户信息（用户名、邮箱、姓名）"""
+        try:
+            auth_header = request.headers.get('Authorization')
+            if not auth_header or not auth_header.startswith('Bearer '):
+                return jsonify({'error': '未提供有效的认证令牌'}), 401
+            token = auth_header.split(' ')[1]
+            username = verify_token(token)
+            if not username:
+                return jsonify({'error': '无效的认证令牌'}), 401
+            user = db.session.query(User).filter_by(username=username).first()
+            if not user or not (getattr(user, 'is_active', False) is True):
+                return jsonify({'error': '用户不存在或已被禁用'}), 401
+            data = request.get_json()
+            if not data:
+                return jsonify({'error': '请求数据格式错误'}), 400
+            new_username = (data.get('username') or '').strip()
+            new_email = (data.get('email') or '').strip()
+            new_full_name = (data.get('full_name') or '').strip()
+            # 用户名校验
+            if not new_username:
+                return jsonify({'error': '用户名不能为空'}), 400
+            if new_username != user.username:
+                exists = db.session.query(User).filter_by(username=new_username).first()
+                if exists:
+                    return jsonify({'error': '该用户名已被占用'}), 400
+            if new_email and new_email != user.email:
+                if db.session.query(User).filter_by(email=new_email).first():
+                    return jsonify({'error': '该邮箱已被占用'}), 400
+                user.email = new_email
+            if new_full_name:
+                user.full_name = new_full_name
+            username_changed = False
+            if new_username != user.username:
+                user.username = new_username
+                username_changed = True
+            db.session.commit()
+            result = user.to_dict()
+            result['username_changed'] = str(username_changed)
+            return jsonify(result)
+        except Exception as e:
+            import traceback
+            return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
 
-                data = request.get_json()
-                if not data:
-                    return jsonify({'error': '请求数据格式错误'}), 400
+    # 管理员用户管理接口（分页、查询、批量、增删改查）
+    from sqlalchemy import or_
 
-                new_username = data.get('username', '').strip()
-                new_email = data.get('email', '').strip()
-                new_full_name = data.get('full_name', '').strip()
 
-                # 用户名校验
-                if not new_username:
-                    return jsonify({'error': '用户名不能为空'}), 400
-                if new_username != user.username:
-                    # 检查用户名唯一性
-                    exists = db.session.query(User).filter_by(username=new_username).first()
-                    if exists:
-                        return jsonify({'error': '该用户名已被占用'}), 400
-                if new_email:
-                    # 检查邮箱唯一性（如有需要，可取消注释）
-                    # exists_email = db.session.query(User).filter_by(email=new_email).first()
-                    # if exists_email and exists_email.id != user.id:
-                    #     return jsonify({'error': '该邮箱已被占用'}), 400
-                    user.email = new_email
-                if new_full_name:
-                    user.full_name = new_full_name
+    @app.route('/api/admin/users', methods=['GET'])
+    def admin_list_users():
+        """分页+条件查询用户"""
+        try:
+            _, err, code = admin_auth_check()
+            if err:
+                return err, code
+            # 分页参数
+            page = int(request.args.get('page', 1))
+            page_size = int(request.args.get('page_size', 10))
+            # 查询条件
+            q = (request.args.get('q') or '').strip()
+            is_active = request.args.get('is_active')
+            is_admin = request.args.get('is_admin')
+            query = db.session.query(User)
+            if q:
+                username_col = User.__dict__['username']
+                email_col = User.__dict__['email']
+                full_name_col = User.__dict__['full_name']
+                query = query.filter(or_(username_col.like(f'%{q}%'), email_col.like(f'%{q}%'), full_name_col.like(f'%{q}%')))
+            if is_active is not None:
+                is_active_col = User.__dict__['is_active']
+                if is_active.lower() == 'true':
+                    query = query.filter(is_active_col == True)
+                elif is_active.lower() == 'false':
+                    query = query.filter(is_active_col == False)
+            if is_admin is not None:
+                is_admin_col = User.__dict__['is_admin']
+                if is_admin.lower() == 'true':
+                    query = query.filter(is_admin_col == True)
+                elif is_admin.lower() == 'false':
+                    query = query.filter(is_admin_col == False)
+            total = query.count()
+            # 自定义排序：管理员（admin）优先，其余按sort_order升序、id升序
+            from sqlalchemy import desc, case
+            username_col = getattr(User, 'username')
+            sort_order_col = getattr(User, 'sort_order')
+            id_col = getattr(User, 'id')
+            users = query.order_by(
+                desc(case((username_col == 'admin', 1), else_=0)),  # admin优先
+                sort_order_col.asc(),                               # 其余按sort_order升序
+                id_col.asc()                                        # 再按id升序
+            ).offset((page-1)*page_size).limit(page_size).all()
+            return jsonify({'users': [u.to_dict() for u in users], 'total': total, 'page': page, 'page_size': page_size})
+        except Exception as e:
+            import traceback
+            return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
 
-                username_changed = False
-                if new_username != user.username:
-                    user.username = new_username
-                    username_changed = True
+    @app.route('/api/admin/users', methods=['POST'])
+    def admin_add_user():
+        """添加用户"""
+        try:
+            _, err, code = admin_auth_check()
+            if err:
+                return err, code
+            data = request.get_json()
+            username = (data.get('username') or '').strip()
+            email = (data.get('email') or '').strip()
+            full_name = (data.get('full_name') or '').strip()
+            password = data.get('password') or ''
+            is_admin = bool(data.get('is_admin', False))
+            is_active = bool(data.get('is_active', True))
+            # 校验
+            if not username or not email or not password:
+                return jsonify({'error': '请填写完整的用户名、邮箱和密码'}), 400
+            if db.session.query(User).filter_by(username=username).first():
+                return jsonify({'error': '用户名已存在'}), 400
+            if db.session.query(User).filter_by(email=email).first():
+                return jsonify({'error': '邮箱已存在'}), 400
+            user = User(username=username, email=email, full_name=full_name, is_admin=is_admin, is_active=is_active)
+            user.set_password(password)
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({'success': True, 'user': user.to_dict()})
+        except Exception as e:
+            import traceback
+            return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
 
-                db.session.commit()
-                result = user.to_dict()
-                result['username_changed'] = username_changed
-                return jsonify(result)
-            except Exception as e:
-                import traceback
-                return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
-    """注册认证相关的路由"""
-    # 直接在app.py中定义认证路由，避免导入问题
-    
+    @app.route('/api/admin/users/<int:user_id>', methods=['DELETE'])
+    def admin_delete_user(user_id):
+        """删除单个用户"""
+        try:
+            _, err, code = admin_auth_check()
+            if err:
+                return err, code
+            user = db.session.query(User).filter_by(id=user_id).first()
+            if not user:
+                return jsonify({'error': '用户不存在'}), 404
+            db.session.delete(user)
+            db.session.commit()
+            return jsonify({'success': True})
+        except Exception as e:
+            import traceback
+            return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
+
+    @app.route('/api/admin/users/batch_delete', methods=['POST'])
+    def admin_batch_delete_users():
+        """批量删除用户"""
+        try:
+            _, err, code = admin_auth_check()
+            if err:
+                return err, code
+            data = request.get_json()
+            ids = data.get('ids', [])
+            if not ids or not isinstance(ids, list):
+                return jsonify({'error': '请提供要删除的用户ID列表'}), 400
+            users = db.session.query(User).filter(User.id.in_(ids)).all()
+            for user in users:
+                db.session.delete(user)
+            db.session.commit()
+            return jsonify({'success': True, 'deleted': len(users)})
+        except Exception as e:
+            import traceback
+            return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
+
     @app.route('/api/auth/login', methods=['POST'])
+
+
     def login():
         """用户登录"""
         import os

@@ -29,6 +29,7 @@ class User(db.Model):
     is_admin = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    sort_order = Column(Integer, default=0, index=True)  # 新增：排序字段，支持自定义顺序
 
     def __init__(self, username, email, full_name='', is_active=True, is_admin=False, **kwargs):
         self.username = username
@@ -114,8 +115,7 @@ def verify_token(token: str, token_type: str = "access"):
         sub = payload.get("sub")
         if not isinstance(sub, str):
             return None
-        username: str = sub
-        return payload
+        return sub  # 返回username字符串
     except JWTError:
         return None
 

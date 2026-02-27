@@ -1,13 +1,19 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import api from '../services/api.js'
 import { logout } from '../services/auth.js'
 import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
+import { useRouter, useRoute } from 'vue-router'
 
 const store = useStore()
+const router = useRouter()
 
 const form = ref({ old_password: '', new_password: '', confirm_password: '' })
+const route = useRoute()
+const userId = computed(() => route.params.userId)
+
+// 允许未登录用户访问修改密码页面，无需强制跳转
 
 const submit = async () => {
   if (!form.value.old_password || !form.value.new_password) {
@@ -24,14 +30,29 @@ const submit = async () => {
   }
 
   try {
-    const res = await api.changePassword({ old_password: form.value.old_password, new_password: form.value.new_password })
-    if (res.data && res.data.success) {
-      ElMessage.success('密码修改成功，请重新登录')
-      // 强制登出
-      store.dispatch('logout')
-      logout()
+    let res
+    if (userId.value) {
+      // 管理员重置其他用户密码
+      res = await api.adminResetPassword(userId.value, form.value.new_password)
+      if (res.data && res.data.success) {
+        ElMessage.success('密码重置成功')
+      } else {
+        ElMessage.error(res.data?.error || res.data?.message || '重置失败')
+      }
     } else {
-      ElMessage.error(res.data?.error || res.data?.message || '修改失败')
+      // 当前用户修改自己密码
+      res = await api.changePassword({ old_password: form.value.old_password, new_password: form.value.new_password })
+      if (res.data && res.data.success) {
+        ElMessage.success('密码修改成功，请重新登录')
+        // 强制登出并跳转登录页
+        store.dispatch('logout')
+        logout()
+        setTimeout(() => {
+          router.replace('/login')
+        }, 800)
+      } else {
+        ElMessage.error(res.data?.error || res.data?.message || '修改失败')
+      }
     }
   } catch (err) {
     console.error(err)

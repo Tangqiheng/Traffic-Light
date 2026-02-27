@@ -95,6 +95,8 @@ const route = useRoute()
 import api from '../services/api.js'
 import * as echarts from 'echarts'
 
+let initialized = false // 防止重复初始化
+
 // 统计图相关
 const statistics = ref({ points: [] })
 let chart = null
@@ -228,7 +230,7 @@ function renderChart() {
       {
         type: 'value',
         name: '车流量(辆)',
-        nameTextStyle: { color: '#888', fontWeight: 500, fontSize: 13, fontFamily: 'Segoe UI, Arial, sans-serif' },
+        nameTextStyle: { color: '#3b82f6', fontWeight: 500, fontSize: 13, fontFamily: 'Segoe UI, Arial, sans-serif' },
         min: function (value) { return Math.max(0, value.min - 10) },
         max: function (value) { return value.max + 10 },
         position: 'left',
@@ -239,7 +241,7 @@ function renderChart() {
       {
         type: 'value',
         name: '速度(km/h)',
-        nameTextStyle: { color: '#888', fontWeight: 500, fontSize: 13, fontFamily: 'Segoe UI, Arial, sans-serif' },
+        nameTextStyle: { color: '#22c55e', fontWeight: 500, fontSize: 13, fontFamily: 'Segoe UI, Arial, sans-serif' },
         min: function (value) { return Math.max(0, value.min - 5) },
         max: function (value) { return value.max + 5 },
         position: 'right',
@@ -388,7 +390,10 @@ async function fetchTrafficData() {
 
 
 onMounted(() => {
-  loadChartData()
+  if (!initialized) {
+    loadChartData()
+    initialized = true
+  }
   updateCurrentTime()
   timer = setInterval(updateCurrentTime, 1000)
   // 本地倒计时每秒跳动
@@ -411,7 +416,7 @@ onMounted(() => {
 
 
 onUnmounted(() => {
-  resetDashboardData()
+  // 不再重置数据，只清理定时器和图表实例，保证keep-alive缓存
   if (window._trafficDataTimer) {
     clearInterval(window._trafficDataTimer)
     window._trafficDataTimer = null

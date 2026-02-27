@@ -1,25 +1,37 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import api from '../services/api.js'
 import { getCurrentUser } from '../services/auth.js'
 import { ElMessage } from 'element-plus'
+import { useRoute } from 'vue-router'
 
 const store = useStore()
 
+
 const formRef = ref(null)
 const form = ref({ username: '', email: '', full_name: '' })
+const route = useRoute()
+const userId = computed(() => route.params.userId)
 
 const loadUser = async () => {
   try {
-    const res = await getCurrentUser()
-    const data = res.data
+    let data
+    if (userId.value) {
+      // 管理员查看/编辑其他用户
+      const res = await api.getUserById(userId.value)
+      data = res.data
+    } else {
+      // 当前用户
+      const res = await getCurrentUser()
+      data = res.data
+    }
     form.value.username = data.username
     form.value.email = data.email || ''
     form.value.full_name = data.full_name || ''
-    // 只更新本地表单，不主动全局写入user，避免页面切换时全局user被覆盖
   } catch (err) {
     console.error('加载用户失败', err)
+    ElMessage.error('加载用户信息失败')
   }
 }
 
@@ -35,17 +47,16 @@ const submit = async () => {
       email: form.value.email,
       full_name: form.value.full_name
     }
-    const res = await api.updateProfile(payload)
-    const updated = res.data
-    store.dispatch('setUser', updated)
-    ElMessage.success('资料更新成功')
-    // 若用户名被修改，建议刷新页面或强制重新登录
-    if (updated.username && updated.username !== form.value.username) {
-      ElMessage.info('用户名已更改，请重新登录')
-      setTimeout(() => {
-        window.location.href = '/login'
-      }, 1500)
+    let res
+    if (userId.value) {
+      // 管理员编辑其他用户
+      res = await api.updateUserById(userId.value, payload)
+    } else {
+      // 当前用户
+      res = await api.updateProfile(payload)
+      store.dispatch('setUser', res.data)
     }
+    ElMessage.success('资料更新成功')
   } catch (err) {
     console.error(err)
     ElMessage.error(err.response?.data?.detail || '更新失败')

@@ -1,3 +1,22 @@
+// 管理员获取指定用户信息
+export const getUserById = (userId) => authClient.get(`/admin/users/${userId}`)
+// 管理员更新指定用户信息
+export const updateUserById = (userId, data) => authClient.put(`/admin/users/${userId}`, data)
+// 管理员重置指定用户密码
+export const adminResetPassword = (userId, newPassword) => authClient.post(`/admin/users/${userId}/reset_password`, { new_password: newPassword })
+// 注册新用户
+export const register = (data) => {
+  return import('axios').then(({ default: axios }) =>
+    axios.post('/api/auth/register', data)
+  )
+}
+
+// 管理员获取用户列表
+export const getAllUsers = () => {
+  return import('./auth.js').then(({ default: authClient }) =>
+    authClient.get('/admin/users')
+  )
+}
 import authClient from './auth.js'
 
 // 简单用户相关API的命名导出，供页面直接调用
@@ -57,8 +76,16 @@ const apiService = {
 
   changePassword(payload) {
     return changePassword(payload)
+  },
+
+  // 批量更新用户排序
+  sortUsers(payload) {
+    return authClient.post('/admin/users/sort', { sort_list: payload });
   }
 }
 
 // 默认导出API服务对象
 export default apiService
+
+// 管理员批量更新用户排序
+export const sortUsers = (sortList) => authClient.post('/admin/users/sort', { sort_list: sortList })

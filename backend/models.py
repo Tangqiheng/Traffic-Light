@@ -1,3 +1,31 @@
+from database import db
+from datetime import datetime
+# 交通统计数据表
+class TrafficStat(db.Model):
+    __tablename__ = 'traffic_stat'
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    flow = db.Column(db.Integer)  # 总车流量
+    speed = db.Column(db.Float)   # 平均速度
+    # 可根据实际需求添加更多字段
+# 操作日志表
+from datetime import datetime
+
+class OperationLog(db.Model):
+    __tablename__ = 'operation_logs'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    username = db.Column(db.String(50))
+    action = db.Column(db.String(100))
+    detail = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class UserPermission(db.Model):
+    __tablename__ = 'user_permissions'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    permission = db.Column(db.String(100))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt

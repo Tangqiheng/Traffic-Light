@@ -145,17 +145,17 @@ const store = useStore()
 const storeTokensAndRedirect = async (data) => {
   localStorage.setItem('access_token', data.access_token)
   localStorage.setItem('refresh_token', data.refresh_token || '')
-  ElMessage.success(data.message || '登录成功')
-  // 登录后立即拉取用户信息并写入store，确保主页面右上角显示
+  // 登录后立即拉取用户信息，只有拉取成功才跳转主页，保证右上角有个人信息
   try {
     const { getCurrentUser } = await import('../services/auth.js')
     const res = await getCurrentUser()
     store.dispatch('setUser', res.data)
+    ElMessage.success(data.message || '登录成功')
+    router.push('/')
   } catch (e) {
-    // 拉取失败也不影响跳转
+    ElMessage.error('登录成功但获取用户信息失败，请重试')
     store.dispatch('setUser', null)
   }
-  router.push('/')
 }
 
 // 统一错误处理函数

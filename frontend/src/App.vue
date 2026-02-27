@@ -56,6 +56,8 @@
                   <el-dropdown-item @click="goProfile">个人信息</el-dropdown-item>
                   <el-dropdown-item @click="goChangePassword">修改密码</el-dropdown-item>
                   <el-dropdown-item v-if="currentUser && currentUser.is_admin" @click="router.push('/admin')">管理员功能</el-dropdown-item>
+                  <el-dropdown-item v-if="currentUser && currentUser.is_admin" @click="router.push('/admin/logs')">操作日志</el-dropdown-item>
+                  <el-dropdown-item v-if="currentUser && currentUser.is_admin" @click="router.push('/admin/permissions')">权限分配</el-dropdown-item>
                   <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -65,7 +67,9 @@
       </el-header>
       
       <el-main class="main-content">
-        <router-view :key="route.fullPath" />
+        <keep-alive :include="cachedViews">
+          <router-view :key="route.fullPath" />
+        </keep-alive>
       </el-main>
       
       <el-footer class="footer">
@@ -96,6 +100,8 @@ const route = useRoute()
 const store = useStore()
 
 const activeIndex = ref('1')
+// 需要缓存的页面名
+const cachedViews = ref(['Dashboard'])
 
 // 根据当前路由设置激活的菜单项
 const setActiveMenu = () => {
@@ -124,8 +130,8 @@ const handleSelect = (key) => {
   activeIndex.value = key
 }
 
-const currentUser = computed(() => store.getters?.user)
-const isAuthenticated = computed(() => !!localStorage.getItem('access_token'))
+const currentUser = computed(() => store.getters.user)
+const isAuthenticated = computed(() => store.getters.isAuthenticated)
 
 const fetchUserInfo = async () => {
   try {
@@ -133,8 +139,8 @@ const fetchUserInfo = async () => {
     store.dispatch && store.dispatch('setUser', response.data)
   } catch (error) {
     console.error('获取用户信息失败:', error)
-    // 只清空user，不跳转
-    store.dispatch && store.dispatch('logout')
+    // 只清空user，不强制登出，避免频繁跳登录
+    store.dispatch && store.dispatch('setUser', null)
   }
 }
 
@@ -142,7 +148,7 @@ const handleLogout = () => {
   store.dispatch && store.dispatch('logout')
   authLogout()
   ElMessage.success('已退出登录')
-  router.push('/login')
+  // 不用router.push，authLogout已跳转
 }
 
 const goHome = () => { router.push('/') }
@@ -161,10 +167,8 @@ onMounted(async () => {
     router.replace('/login')
     return
   }
-  // 有token但无用户信息时，先拉取
-  if (!store.getters?.user) {
-    await fetchUserInfo()
-  }
+  // 无论是否有user，都尝试拉取一次，保证刷新后也能获取到
+  await fetchUserInfo()
 })
 </script>
 

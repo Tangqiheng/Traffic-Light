@@ -1,1 +1,0 @@
-<backup of backend simple_server.py is available in repository; keep current file as canonical>

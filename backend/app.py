@@ -15,13 +15,9 @@ def create_app():
         # 采集模拟数据，实际可替换为真实采集逻辑
         flow = random.randint(30, 60)
         speed = round(random.uniform(30, 45), 2)
-        with app.app_context():
-            stat = TrafficStat(
-                flow=flow,
-                speed=speed
-            )
-            db.session.add(stat)
-            db.session.commit()
+        stat = TrafficStat(flow=flow, speed=speed)
+        db.session.add(stat)
+        db.session.commit()
     scheduler = BackgroundScheduler()
     scheduler.add_job(collect_traffic_data, 'interval', seconds=60)
     scheduler.start()

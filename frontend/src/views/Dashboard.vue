@@ -171,7 +171,7 @@ async function fetchStatistics() {
     chartData.totalVehicles.shift()
     chartData.avgSpeeds.shift()
   }
-  saveChartData()
+  saveChartData(); // 每次采样都自动保存到 localStorage
   renderChart()
 }
 
@@ -411,49 +411,41 @@ function onResetChart() {
   renderChart();
 }
 
+// 保证定时器只初始化一次
 onMounted(() => {
   if (!initialized) {
-    loadChartData()
-    initialized = true
+    loadChartData();
+    initialized = true;
+    // 定时采样，持续请求后端数据
+    statisticsTimer = setInterval(fetchStatistics, 3000);
   }
-  updateCurrentTime()
-  timer = setInterval(updateCurrentTime, 1000)
-  // 本地倒计时每秒跳动
+  updateCurrentTime();
+  timer = setInterval(updateCurrentTime, 1000);
   countdownTimer = setInterval(() => {
     lightStatuses.value.forEach(lane => {
-      if (lane.remainingTime > 0) lane.remainingTime--
-    })
-  }, 1000)
-  // 交通数据每3秒刷新
-  fetchTrafficData()
+      if (lane.remainingTime > 0) lane.remainingTime--;
+    });
+  }, 1000);
+  fetchTrafficData();
   if (!window._trafficDataTimer) {
-    window._trafficDataTimer = setInterval(fetchTrafficData, 3000)
+    window._trafficDataTimer = setInterval(fetchTrafficData, 3000);
   }
-  renderChart()
-  if (!statisticsTimer) {
-    statisticsTimer = setInterval(fetchStatistics, 3000)
-  }
-})
-
-
+  renderChart();
+});
 
 onUnmounted(() => {
-  // 不再重置数据，只清理定时器和图表实例，保证keep-alive缓存
+  // 不清理 statisticsTimer，保证 keep-alive 缓存时采样持续
   if (window._trafficDataTimer) {
-    clearInterval(window._trafficDataTimer)
-    window._trafficDataTimer = null
-  }
-  if (statisticsTimer) {
-    clearInterval(statisticsTimer)
-    statisticsTimer = null
+    clearInterval(window._trafficDataTimer);
+    window._trafficDataTimer = null;
   }
   if (countdownTimer) {
-    clearInterval(countdownTimer)
-    countdownTimer = null
+    clearInterval(countdownTimer);
+    countdownTimer = null;
   }
   if (chart) {
-    chart.dispose()
-    chart = null
+    chart.dispose();
+    chart = null;
   }
 })
 </script>

@@ -30,6 +30,9 @@ const submit = async () => {
   }
 
   try {
+    // 自动修复：调试输出当前 access_token
+    const token = localStorage.getItem('access_token')
+    console.log('ChangePassword.vue access_token:', token)
     let res
     if (userId.value) {
       // 管理员重置其他用户密码
@@ -41,7 +44,10 @@ const submit = async () => {
       }
     } else {
       // 当前用户修改自己密码
-      res = await api.changePassword({ old_password: form.value.old_password, new_password: form.value.new_password })
+      // 手动带上 Authorization 头，确保 token 一定被带上
+      res = await api.changePassword({ old_password: form.value.old_password, new_password: form.value.new_password }, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
       if (res.data && res.data.success) {
         ElMessage.success('密码修改成功，请重新登录')
         // 强制登出并跳转登录页

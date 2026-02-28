@@ -121,7 +121,12 @@ const handleLogin = async () => {
       }).catch((action) => {
         // 用户选择修改密码或关闭对话框
         if (action === 'cancel') {
-          router.push('/change-password')
+          // 跳转前再次确认 access_token 已保存
+          if (response.access_token) {
+            localStorage.setItem('access_token', response.access_token)
+            console.log('跳转前再次保存 access_token:', response.access_token)
+          }
+          router.push('/change-password') // 使用 SPA 路由跳转，保证 token 不丢失
         }
       })
     } else if (response.access_token) {
@@ -143,7 +148,13 @@ import { useStore } from 'vuex'
 const store = useStore()
 
 const storeTokensAndRedirect = async (data) => {
-  localStorage.setItem('access_token', data.access_token)
+  // 自动修复：每次登录都保存 access_token，并输出调试信息
+  if (data.access_token) {
+    localStorage.setItem('access_token', data.access_token)
+    console.log('access_token 已保存:', data.access_token)
+  } else {
+    console.warn('登录响应未包含 access_token:', data)
+  }
   localStorage.setItem('refresh_token', data.refresh_token || '')
   // 登录后立即拉取用户信息，只有拉取成功才跳转主页，保证右上角有个人信息
   try {

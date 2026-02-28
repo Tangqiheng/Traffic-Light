@@ -263,13 +263,20 @@ def register_auth_routes(app):
     def change_password():
         """修改当前用户密码"""
         try:
+            # 优先从请求头获取 token
             auth_header = request.headers.get('Authorization')
-            if not auth_header or not auth_header.startswith('Bearer '):
-                return jsonify({'error': '未提供有效的认证令牌'}), 401
-            token = auth_header.split(' ')[1]
+            token = None
+            if auth_header and auth_header.startswith('Bearer '):
+                token = auth_header.split(' ')[1]
+            # 兼容从请求体或 query 参数获取 token（前端异常时也能处理）
+            if not token:
+                data = request.get_json(silent=True) or {}
+                token = data.get('access_token') or request.args.get('access_token')
+            if not token:
+                return jsonify({'error': '未提供有效的认证令牌，请重新登录'}), 401
             username = verify_token(token)
             if not username:
-                return jsonify({'error': '无效的认证令牌'}), 401
+                return jsonify({'error': '无效的认证令牌，请重新登录'}), 401
             user = db.session.query(User).filter_by(username=username).first()
             if not user or not (getattr(user, 'is_active', False) is True):
                 return jsonify({'error': '用户不存在或已被禁用'}), 401

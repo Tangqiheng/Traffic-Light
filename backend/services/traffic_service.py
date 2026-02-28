@@ -47,6 +47,18 @@ class TrafficService:
             # 车流量缓慢变化，波动不超过±6
             delta = random.randint(-6, 6)
             vehicle_count = max(5, min(50, prev_count + delta))
+            # 限制最大值（进一步降低为30）
+            vehicle_count = min(vehicle_count, 30)
+            # 增加波动平滑，限制每次采样变化幅度不超过±3
+            if abs(vehicle_count - prev_count) > 3:
+                if vehicle_count > prev_count:
+                    vehicle_count = prev_count + 3
+                else:
+                    vehicle_count = prev_count - 3
+            # 记录本次状态
+            if not hasattr(TrafficService.get_traffic_status, '_last_state'):
+                TrafficService.get_traffic_status._last_state = {}
+            TrafficService.get_traffic_status._last_state[direction] = {'vehicle_count': vehicle_count}
             # 速度与车流量反相关，车多则慢，车少则快
             if vehicle_count < 12:
                 average_speed = random.uniform(38, 50)
@@ -135,8 +147,8 @@ class TrafficService:
             import random
             vehicle_count = max(0, int(base_count * multiplier + random.gauss(0, 5)))
             
-            # 限制最大值
-            vehicle_count = min(vehicle_count, 50)
+            # 限制最大值（进一步降低为30）
+            vehicle_count = min(vehicle_count, 30)
             
             # 根据车流量设置平均速度（车多则速度慢）
             if vehicle_count < 10:

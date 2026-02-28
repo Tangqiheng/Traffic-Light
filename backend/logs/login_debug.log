@@ -1387,3 +1387,9 @@ passlib.exc.MissingBackendError: bcrypt: no backends available -- recommend you 
 [INFO] 登录成功
 [DEBUG] Received password: 'admin123', length: 8
 [WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录
+[DEBUG] Received password: 'admin123', length: 8
+[WARN] 管理员使用默认密码登录

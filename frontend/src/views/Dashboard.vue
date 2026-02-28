@@ -132,21 +132,39 @@ function saveChartData() {
 // 采样点最大数量
 const MAX_POINTS = 20
 // 采样函数：每3秒采样一次，x轴为“系统运行/页面加载后起，精确到秒”
-function fetchStatistics() {
+async function fetchStatistics() {
   const now = new Date()
-  // 采样时间点格式：HH:mm:ss
   function formatTime(date) {
     const pad = n => n.toString().padStart(2, '0')
     return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
   }
-  // 推入新采样点
-  chartData.times.push(formatTime(now))
-  chartData.totalVehicles.push(
-    30 + Math.floor(Math.sin(chartData.times.length / 3) * 10) + Math.floor(Math.random() * 5)
-  )
-  chartData.avgSpeeds.push(
-    35 + Math.floor(Math.cos(chartData.times.length / 4) * 6) + Math.floor(Math.random() * 3)
-  )
+  try {
+    // 调用后端接口获取最新交通数据
+    const response = await api.getTrafficStatus()
+    if (response && response.data && response.data.length > 0) {
+      const data = response.data[0]
+      chartData.times.push(formatTime(now))
+      chartData.totalVehicles.push(data.vehicle_count || 35)
+      chartData.avgSpeeds.push(data.average_speed || 36.1)
+      // 联动更新交通概况
+      trafficData.value.totalVehicles = data.vehicle_count || 35
+      trafficData.value.averageSpeed = data.average_speed || 36.1
+    } else {
+      // 后端无数据时用默认值
+      chartData.times.push(formatTime(now))
+      chartData.totalVehicles.push(35)
+      chartData.avgSpeeds.push(36.1)
+      trafficData.value.totalVehicles = 35
+      trafficData.value.averageSpeed = 36.1
+    }
+  } catch {
+    // 网络异常时用默认值
+    chartData.times.push(formatTime(now))
+    chartData.totalVehicles.push(35)
+    chartData.avgSpeeds.push(36.1)
+    trafficData.value.totalVehicles = 35
+    trafficData.value.averageSpeed = 36.1
+  }
   // 保持最大点数
   if (chartData.times.length > MAX_POINTS) {
     chartData.times.shift()
@@ -154,9 +172,6 @@ function fetchStatistics() {
     chartData.avgSpeeds.shift()
   }
   saveChartData()
-  // 联动更新交通概况
-  trafficData.value.totalVehicles = chartData.totalVehicles[chartData.totalVehicles.length - 1]
-  trafficData.value.averageSpeed = chartData.avgSpeeds[chartData.avgSpeeds.length - 1]
   renderChart()
 }
 
@@ -385,9 +400,16 @@ async function fetchTrafficData() {
   }
 }
 
-
-
-
+function onResetChart() {
+  // 清空统计数据
+  chartData.times = [];
+  chartData.totalVehicles = [];
+  chartData.avgSpeeds = [];
+  saveChartData();
+  // 立即采样一个点
+  fetchStatistics();
+  renderChart();
+}
 
 onMounted(() => {
   if (!initialized) {

@@ -4,6 +4,20 @@
 
 这是一个基于Vue.js + FastAPI的智能交通灯控制系统，实现了现代化的Web界面和RESTful API服务。
 
+## 近期更新
+- 修复了前后端认证令牌丢失问题，保证登录和修改密码流程安全可靠。
+- 优化了登录界面跳转逻辑，默认密码登录后可安全跳转修改密码页面。
+- 清理了自动化测试脚本，项目已上传至GitHub远程仓库。
+
+## Git上传说明
+1. 本地仓库路径：项目根目录（含.git文件夹）
+2. 远程仓库URL：https://github.com/Tangqiheng/Traffic-Light.git
+3. 推送命令：
+   ```sh
+   git remote add origin https://github.com/Tangqiheng/Traffic-Light.git
+   git push -u origin main
+   ```
+
 ## 系统特点
 
 - 🚦 实时交通状态监控
@@ -21,13 +35,14 @@
 - Vuex 状态管理
 - Axios HTTP客户端
 - ECharts 数据可视化
+- Vite 构建工具
 
 ### 后端
-- FastAPI Web框架
+- Flask Web框架
 - SQLAlchemy ORM
-- SQLite 数据库
+- MySQL 数据库（通过 SQL 文件初始化，推荐 Navicat 导入 mysql_init.sql）
 - JWT Token认证
-- Uvicorn ASGI服务器
+- APScheduler 定时任务
 
 ## 快速开始
 

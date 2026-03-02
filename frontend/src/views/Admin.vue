@@ -9,6 +9,7 @@
           <el-button type="primary" size="small" @click="handleSearch" :loading="loading">搜索</el-button>
           <el-button type="success" size="small" @click="showAddDialog=true">添加用户</el-button>
           <el-button type="danger" size="small" :disabled="!multipleSelection.length" @click="handleBatchDelete">批量删除</el-button>
+          <el-button type="warning" size="small" @click="handleResetSort" :loading="loading">一键重置排序</el-button>
           <el-button size="small" @click="fetchUsers" :loading="loading">刷新</el-button>
         </div>
       </div>
@@ -113,7 +114,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { getAllUsers } from '../services/api.js'
 import authClient from '../services/auth.js'
 import UserTableDraggable from '../components/UserTableDraggable.vue'
-import { sortUsers } from '../services/api.js'
+import { sortUsers, resetUserSort } from '../services/api.js'
 
 const users = ref([])
 const total = ref(0)
@@ -274,6 +275,16 @@ const handleUpdateOrder = async (newUsers) => {
   } catch (e) {
     ElMessage.error('排序更新失败')
   }
+}
+
+const handleResetSort = () => {
+  ElMessageBox.confirm('确定要重置排序吗？将按ID从小到大排序，admin默认排第一。', '重置排序', { type: 'warning' })
+    .then(async () => {
+      await resetUserSort()
+      ElMessage.success('排序已重置')
+      fetchUsers()
+    })
+    .catch(() => {})
 }
 
 onMounted(() => {

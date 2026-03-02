@@ -47,6 +47,7 @@
       <div class="login-footer">
         <p>默认管理员账户: admin / admin123</p>
         <p class="warning-text">请及时修改默认密码</p>
+        <el-link type="primary" @click="goRegister">没有账号？去注册</el-link>
       </div>
     </div>
   </div>
@@ -273,6 +274,10 @@ const handleUnauthorized = (errorData) => {
     duration: duration,
     grouping: true
   })
+}
+
+const goRegister = () => {
+  router.push('/register')
 }
 </script>
 

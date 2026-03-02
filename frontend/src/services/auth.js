@@ -49,6 +49,10 @@ export const login = (username, safePassword) => {
   }).then(response => response.data) // 返回data而不是整个response对象
 }
 
+export const register = (payload) => {
+  return axios.post('/api/auth/register', payload).then(response => response.data)
+}
+
 export const getCurrentUser = () => {
   return authClient.get('/user/profile')
 }

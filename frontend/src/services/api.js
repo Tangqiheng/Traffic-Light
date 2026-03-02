@@ -89,3 +89,6 @@ export default apiService
 
 // 管理员批量更新用户排序
 export const sortUsers = (sortList) => authClient.post('/admin/users/sort', { sort_list: sortList })
+
+// 管理员一键重置用户排序：admin第一，其余按ID升序
+export const resetUserSort = () => authClient.post('/admin/users/sort/reset')

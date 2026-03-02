@@ -33,7 +33,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import api from '../services/api.js'
+import { register } from '../services/auth.js'
 
 const router = useRouter()
 const registerFormRef = ref()
@@ -85,11 +85,11 @@ const handleRegister = async () => {
       full_name: registerForm.full_name.trim(),
       password: registerForm.password
     }
-    await api.register(payload)
-    ElMessage.success('注册成功，请登录')
+    const response = await register(payload)
+    ElMessage.success(response.message || '注册成功，请登录')
     router.push('/login')
   } catch (err) {
-    if (err.response && err.response.data && err.response.data.error) {
+    if (err.response?.data?.error) {
       ElMessage.error(err.response.data.error)
     } else {
       ElMessage.error('注册失败，请重试')

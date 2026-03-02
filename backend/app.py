@@ -13,11 +13,16 @@ def create_app():
     import random
     def collect_traffic_data():
         # 采集模拟数据，实际可替换为真实采集逻辑
-        flow = random.randint(30, 60)
-        speed = round(random.uniform(30, 45), 2)
-        stat = TrafficStat(flow=flow, speed=speed)
-        db.session.add(stat)
-        db.session.commit()
+        with app.app_context():
+            try:
+                flow = random.randint(30, 60)
+                speed = round(random.uniform(30, 45), 2)
+                stat = TrafficStat(flow=flow, speed=speed)
+                db.session.add(stat)
+                db.session.commit()
+            except Exception:
+                db.session.rollback()
+                raise
     scheduler = BackgroundScheduler()
     scheduler.add_job(collect_traffic_data, 'interval', seconds=60)
     scheduler.start()
@@ -469,6 +474,125 @@ def register_auth_routes(app):
             import traceback
             return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
 
+    @app.route('/api/admin/users/sort', methods=['POST'])
+    def admin_sort_users():
+        """批量更新用户排序"""
+        try:
+            _, err, code = admin_auth_check()
+            if err:
+                return err, code
+
+            data = request.get_json(silent=True) or {}
+            sort_list = data.get('sort_list', [])
+            if not isinstance(sort_list, list) or not sort_list:
+                return jsonify({'error': 'sort_list不能为空且必须为列表'}), 400
+
+            updated_count = 0
+            for item in sort_list:
+                if not isinstance(item, dict):
+                    continue
+                user_id = item.get('id')
+                sort_order = item.get('sort_order')
+                if user_id is None or sort_order is None:
+                    continue
+
+                user = db.session.query(User).filter_by(id=user_id).first()
+                if not user:
+                    continue
+                if getattr(user, 'username', None) == 'admin':
+                    continue
+
+                setattr(user, 'sort_order', int(sort_order))
+                updated_count += 1
+
+            db.session.commit()
+            return jsonify({'success': True, 'updated': updated_count})
+        except Exception as e:
+            db.session.rollback()
+            import traceback
+            return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
+
+    @app.route('/api/admin/users/sort/reset', methods=['POST'])
+    def admin_reset_user_sort():
+        """一键重置用户排序：admin第一，其余按ID升序"""
+        try:
+            _, err, code = admin_auth_check()
+            if err:
+                return err, code
+
+            users = db.session.query(User).order_by(User.id.asc()).all()
+            next_sort = 0
+            updated_count = 0
+
+            for user in users:
+                if getattr(user, 'username', None) == 'admin':
+                    setattr(user, 'sort_order', -1)
+                else:
+                    setattr(user, 'sort_order', next_sort)
+                    next_sort += 1
+                updated_count += 1
+
+            db.session.commit()
+            return jsonify({'success': True, 'updated': updated_count})
+        except Exception as e:
+            db.session.rollback()
+            import traceback
+            return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
+
+    @app.route('/api/auth/register', methods=['POST'])
+    def register():
+        """用户注册"""
+        try:
+            data = request.get_json(silent=True)
+            if not data:
+                return jsonify({'error': '请求数据格式错误'}), 400
+
+            username = (data.get('username') or '').strip()
+            email = (data.get('email') or '').strip()
+            full_name = (data.get('full_name') or '').strip()
+            password = data.get('password') or ''
+
+            if not username:
+                return jsonify({'error': '用户名不能为空'}), 400
+            if len(username) < 3 or len(username) > 20:
+                return jsonify({'error': '用户名长度需为3-20位'}), 400
+            if not email:
+                return jsonify({'error': '邮箱不能为空'}), 400
+            if '@' not in email or '.' not in email:
+                return jsonify({'error': '邮箱格式不正确'}), 400
+            if not password:
+                return jsonify({'error': '密码不能为空'}), 400
+            if len(password) < 6:
+                return jsonify({'error': '密码长度不能少于6位'}), 400
+            if len(password.encode('utf-8')) > 72:
+                return jsonify({'error': '密码不能超过72字节'}), 400
+
+            if db.session.query(User).filter_by(username=username).first():
+                return jsonify({'error': '用户名已存在'}), 400
+            if db.session.query(User).filter_by(email=email).first():
+                return jsonify({'error': '邮箱已存在'}), 400
+
+            user = User(
+                username=username,
+                email=email,
+                full_name=full_name,
+                is_active=True,
+                is_admin=False
+            )
+            user.set_password(password)
+
+            db.session.add(user)
+            db.session.commit()
+
+            return jsonify({
+                'success': True,
+                'message': '注册成功',
+                'user': user.to_dict()
+            }), 201
+        except Exception as e:
+            import traceback
+            return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
+
     @app.route('/api/auth/login', methods=['POST'])
 
 
@@ -593,7 +717,7 @@ def register_auth_routes(app):
                 return jsonify({'error': '刷新令牌不能为空'}), 400
 
             # 验证刷新令牌
-            username = verify_token(refresh_token)
+            username = verify_token(refresh_token, "refresh")
             if not username:
                 return jsonify({'error': '无效的刷新令牌'}), 401
 
